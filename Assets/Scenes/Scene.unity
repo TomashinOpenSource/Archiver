@@ -216,6 +216,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 657051472}
+  - component: {fileID: 657051473}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -238,3 +239,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &657051473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657051470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cdf8bd34fed3a946b2542ba8dcaa5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someDatas:
+  - Name: hagfuwia
+    Password: g237891fb943bf
+    Number: 2147483647
+  - Name: dasbfibe
+    Password: 481fb87
+    Number: 2358743
+  - Name: ebfjbqiewvbi
+    Password: 943gf789cg
+    Number: 784356782
+  filePaths: []
