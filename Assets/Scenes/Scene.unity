@@ -216,34 +216,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 657051472}
-  - component: {fileID: 657051471}
   m_Layer: 0
-  m_Name: DataManager
+  m_Name: Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &657051471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 657051470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cdf8bd34fed3a946b2542ba8dcaa5ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  password: 
-  someDatas:
-  - Text: afbkjbvjabs
-    Number: 2345252
-    Password: 
-  - Text: htgjpjhtnot
-    Number: 876905
-    Password: 
 --- !u!4 &657051472
 Transform:
   m_ObjectHideFlags: 0
