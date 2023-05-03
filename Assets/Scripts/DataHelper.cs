@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using Ionic.Zip;
 
 public static class DataHelper
 {
@@ -21,6 +22,18 @@ public static class DataHelper
 
     public static string CreateArchive(string directoryPath, List<string> filePaths, string password)
     {
-        return directoryPath;
+        string archiveName = "archive.zip";
+        string archivePath = Path.Combine(directoryPath, archiveName);
+
+        using (var zipFile = new ZipFile(archivePath))
+        {
+            for (int i = 0; i < filePaths.Count; i++)
+            {
+                var zipEntry = zipFile.AddFile(filePaths[i], @"\");
+                zipEntry.Password = password;
+            }
+            zipFile.Save();
+        }
+        return archivePath;
     }
 }
