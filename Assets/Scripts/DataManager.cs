@@ -22,11 +22,11 @@ public class DataManager : MonoBehaviour
         Application.logMessageReceived += LogReceived;
     }
 
-    private void Start()
+    private async void Start()
     {
         filePaths = DataHelper.CreateFiles(Application.persistentDataPath, someDatas);
         filePaths.ForEach(filePath => LogReceived(filePath));
-        archivePath = DataHelper.CreateArchive(Application.persistentDataPath, filePaths, "1234");
+        archivePath = await DataHelper.CreateArchive(Application.persistentDataPath, filePaths, "1234");
         LogReceived(archivePath);
     }
     
