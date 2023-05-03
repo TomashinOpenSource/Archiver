@@ -19,5 +19,6 @@ public class DataManager : MonoBehaviour
     public void CreateFiles()
     {
         filePaths = DataHelper.CreateFiles(Application.persistentDataPath, someDatas);
+        DataHelper.CreateZipWithDifferentPasswords(filePaths.ToArray(), "1234");
     }
 }
