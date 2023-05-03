@@ -25,15 +25,23 @@ public static class DataHelper
         string archiveName = "archive.zip";
         string archivePath = Path.Combine(directoryPath, archiveName);
 
+        Debug.Log("CreateArchive - Start");
         using (var zipFile = new ZipFile(archivePath))
         {
+            Debug.Log("CreateArchive - Using");
             for (int i = 0; i < filePaths.Count; i++)
             {
-                var zipEntry = zipFile.AddFile(filePaths[i], @"\");
+                Debug.Log($"CreateArchive - File {i} - Start");
+                var filePath = filePaths[i];
+                Debug.Log($"CreateArchive - File {i} - AddFile");
+                var zipEntry = !zipFile.ContainsEntry(Path.GetFileName(filePath)) ? zipFile.AddFile(filePath, @"\") : zipFile.UpdateEntry(filePath, @"\");
+                Debug.Log($"CreateArchive - File {i} - Password");
                 zipEntry.Password = password;
+                Debug.Log($"CreateArchive - File {i} - End");
             }
             zipFile.Save();
         }
+        Debug.Log("CreateArchive - End");
         return archivePath;
     }
 }
