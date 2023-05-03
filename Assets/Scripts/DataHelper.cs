@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using SevenZip;
 using UnityEngine;
-using Ionic.Zip;
 
 public static class DataHelper
 {
@@ -22,26 +22,23 @@ public static class DataHelper
 
     public static string CreateArchive(string directoryPath, List<string> filePaths, string password)
     {
-        string archiveName = "archive.zip";
-        string archivePath = Path.Combine(directoryPath, archiveName);
+        var archiveName = "archive.zip";
+        var archivePath = Path.Combine(directoryPath, archiveName);
 
-        Debug.Log("CreateArchive - Start");
-        using (var zipFile = new ZipFile(archivePath))
+        SevenZipBase.SetLibraryPath(Path.Combine(Application.streamingAssetsPath, "7z.dll"));
+
+        var zipCompressor = new SevenZipCompressor()
         {
-            Debug.Log("CreateArchive - Using");
-            for (int i = 0; i < filePaths.Count; i++)
-            {
-                Debug.Log($"CreateArchive - File {i} - Start");
-                var filePath = filePaths[i];
-                Debug.Log($"CreateArchive - File {i} - AddFile");
-                var zipEntry = !zipFile.ContainsEntry(Path.GetFileName(filePath)) ? zipFile.AddFile(filePath, @"\") : zipFile.UpdateEntry(filePath, @"\");
-                Debug.Log($"CreateArchive - File {i} - Password");
-                zipEntry.Password = password;
-                Debug.Log($"CreateArchive - File {i} - End");
-            }
-            zipFile.Save();
-        }
-        Debug.Log("CreateArchive - End");
+            ArchiveFormat = OutArchiveFormat.Zip,
+            CompressionLevel = SevenZip.CompressionLevel.Normal,
+            CompressionMethod = CompressionMethod.Deflate,
+            ZipEncryptionMethod = ZipEncryptionMethod.ZipCrypto,
+            CompressionMode = CompressionMode.Append,
+            TempFolderPath = Path.GetTempPath()
+        };
+        
+        zipCompressor.CompressFilesEncrypted(archivePath, password, filePaths.ToArray());
+
         return archivePath;
     }
 }
