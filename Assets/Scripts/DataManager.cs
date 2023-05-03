@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class DataManager : MonoBehaviour
@@ -10,15 +11,11 @@ public class DataManager : MonoBehaviour
     
     [Header("State")]
     [SerializeField] private List<string> filePaths;
+    [SerializeField] private string archivePath;
 
     private void Start()
     {
-        CreateFiles();
-    }
-
-    public void CreateFiles()
-    {
         filePaths = DataHelper.CreateFiles(Application.persistentDataPath, someDatas);
-        DataHelper.CreateZipWithDifferentPasswords(filePaths.ToArray(), "1234");
+        archivePath = DataHelper.CreateArchive(Application.persistentDataPath, filePaths, "1234");
     }
 }
