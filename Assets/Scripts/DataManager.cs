@@ -20,14 +20,13 @@ public class DataManager : MonoBehaviour
     private void Awake()
     {
         Application.logMessageReceived += LogReceived;
-        var path = Application.persistentDataPath;
     }
 
-    private async void Start()
+    private void Start()
     {
         filePaths = DataHelper.CreateFiles(Application.persistentDataPath, someDatas);
         filePaths.ForEach(filePath => LogReceived(filePath));
-        archivePath = await DataHelper.CreateArchive(Application.persistentDataPath, filePaths, "1234");
+        archivePath = DataHelper.CreateArchive(Application.persistentDataPath, filePaths, "1234");
         LogReceived(archivePath);
     }
     
