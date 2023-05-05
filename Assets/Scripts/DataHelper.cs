@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using SevenZip;
+//using SevenZip;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -28,6 +28,18 @@ public static class DataHelper
         var archiveName = "archive.zip";
         var archivePath = Path.Combine(directoryPath, archiveName);
 
+        lzip.compress_File(5, archivePath, filePaths[0], append:true, password: password);
+        lzip.compress_File(5, archivePath, filePaths[1], true);
+        lzip.compress_File(5, archivePath, filePaths[2], append:true, password: password);
+        
+        return archivePath;
+    }
+
+    public static async UniTask<string> CreateArchiveSevenZip(string directoryPath, List<string> filePaths, string password)
+    {
+        var archiveName = "archive.zip";
+        var archivePath = Path.Combine(directoryPath, archiveName);
+/*
         var dllPath = await LoadZipDLL();
         //var dllPath = Resources.Load("7z.dll");
         SevenZipBase.SetLibraryPath(dllPath);
@@ -47,7 +59,7 @@ public static class DataHelper
         //await zipCompressor.CompressFilesEncryptedAsync(archivePath, password, filePaths.ToArray());
         zipCompressor.CompressFiles(archivePath, filePaths.ToArray());
         Debug.Log("CompressFiles DONE");
-
+*/
         return archivePath;
     }
 
