@@ -20,6 +20,7 @@ public class DataManager : MonoBehaviour
     private void Awake()
     {
         Application.logMessageReceived += LogReceived;
+        var path = Application.persistentDataPath;
     }
 
     private async void Start()
@@ -32,6 +33,8 @@ public class DataManager : MonoBehaviour
     
     private void LogReceived(string message, string stackTrace = null, LogType logType = LogType.Log)
     {
-        textField.text += "\n" + message;
+        textField.text += $"\n---\n{message}";
+        if (!string.IsNullOrEmpty(stackTrace) && logType != LogType.Log)
+            textField.text += $"\n{stackTrace}";
     }
 }

@@ -23,51 +23,54 @@ public static class DataHelper
         return paths;
     }
 
-    public static async Task<string> CreateArchive(string directoryPath, List<string> filePaths, string password)
+    public static async UniTask<string> CreateArchive(string directoryPath, List<string> filePaths, string password)
     {
         var archiveName = "archive.zip";
         var archivePath = Path.Combine(directoryPath, archiveName);
 
-        var dllName = "7z.dll";
-        var dllPath = Path.Combine(Application.streamingAssetsPath, dllName);
-#if UNITY_ANDROID && !UNITY_EDITOR
-        // Преобразуем путь в формат, поддерживаемый Android API
-        dllPath = "jar:file://" + Application.dataPath + "!/assets/" + dllName;
-#endif
-// Используем WWW для загрузки файла
-        using (var request = UnityWebRequest.Get(dllPath))
-        {
-            // Отправляем запрос и ждем завершения
-            await request.SendWebRequest();
-
-            // Если запрос завершился с ошибкой, то выводим сообщение об ошибке и выходим
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Failed to load file: {request.error}");
-                return null;
-            }
-
-            // Получаем данные из ответа
-            dllPath = Path.Combine(Application.temporaryCachePath, dllName);
-            System.IO.File.WriteAllBytes(dllPath, request.downloadHandler.data);
-
-        }
-// Теперь содержимое файла можно получить из www.text или www.bytes
-
+        var dllPath = await LoadZipDLL();
         SevenZipBase.SetLibraryPath(dllPath);
-
+        
         var zipCompressor = new SevenZipCompressor()
         {
             ArchiveFormat = OutArchiveFormat.Zip,
             CompressionLevel = SevenZip.CompressionLevel.Normal,
             CompressionMethod = CompressionMethod.Deflate,
             ZipEncryptionMethod = ZipEncryptionMethod.ZipCrypto,
-            CompressionMode = !File.Exists(archivePath) ? CompressionMode.Create : CompressionMode.Append,
+            //CompressionMode = !File.Exists(archivePath) ? CompressionMode.Create : CompressionMode.Append,
+            CompressionMode = CompressionMode.Create,
             TempFolderPath = Path.GetTempPath()
         };
         
-        zipCompressor.CompressFilesEncrypted(archivePath, password, filePaths.ToArray());
+        await zipCompressor.CompressFilesEncryptedAsync(archivePath, password, filePaths.ToArray());
 
         return archivePath;
+    }
+
+    public static async UniTask<string> LoadZipDLL()
+    {
+        var dllName = "7z.dll";
+        var dllPath = Path.Combine(Application.persistentDataPath, dllName);
+        if (!File.Exists(dllPath))
+        {
+            var loadPath = Path.Combine(Application.streamingAssetsPath, dllName);
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                var request = UnityWebRequest.Get(loadPath);
+                await request.SendWebRequest();
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log($"ERROR - Failed to load file: {request.error}");
+                    return null;
+                }
+                await File.WriteAllBytesAsync(dllPath, request.downloadHandler.data);
+            }
+            else
+            {
+                File.Copy(loadPath, dllPath);
+            }
+        }
+        Debug.Log($"Success - LoadZipDLL - {dllPath}");
+        return dllPath;
     }
 }
