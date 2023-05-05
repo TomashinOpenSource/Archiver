@@ -29,20 +29,24 @@ public static class DataHelper
         var archivePath = Path.Combine(directoryPath, archiveName);
 
         var dllPath = await LoadZipDLL();
+        //var dllPath = Resources.Load("7z.dll");
         SevenZipBase.SetLibraryPath(dllPath);
-        
+        Debug.Log("SetLibraryPath DONE");
         var zipCompressor = new SevenZipCompressor()
         {
             ArchiveFormat = OutArchiveFormat.Zip,
             CompressionLevel = SevenZip.CompressionLevel.Normal,
             CompressionMethod = CompressionMethod.Deflate,
-            ZipEncryptionMethod = ZipEncryptionMethod.ZipCrypto,
+            //ZipEncryptionMethod = ZipEncryptionMethod.Aes256,
             //CompressionMode = !File.Exists(archivePath) ? CompressionMode.Create : CompressionMode.Append,
             CompressionMode = CompressionMode.Create,
             TempFolderPath = Path.GetTempPath()
         };
+        Debug.Log("new SevenZipCompressor DONE");
         
-        await zipCompressor.CompressFilesEncryptedAsync(archivePath, password, filePaths.ToArray());
+        //await zipCompressor.CompressFilesEncryptedAsync(archivePath, password, filePaths.ToArray());
+        zipCompressor.CompressFiles(archivePath, filePaths.ToArray());
+        Debug.Log("CompressFiles DONE");
 
         return archivePath;
     }
